@@ -127,13 +127,6 @@ export default function AttendanceScreen({ mode }: { mode: Mode }) {
     ? periodFromMonthYear(getDefaultMonthYear())
     : buildPeriod('day', getTodayDateValue());
 
-  const listRequestIdRef = useRef(0);
-  const employeesRef = useRef<any[]>(employees);
-  const departmentsRef = useRef<any[]>(departments);
-  const hasDisplayedRecordsRef = useRef(false);
-  employeesRef.current = employees;
-  departmentsRef.current = departments;
-  hasDisplayedRecordsRef.current = records.length > 0;
   const [from, setFrom] = useState(initialPeriod.from);
   const [to, setTo] = useState(initialPeriod.to);
   const [departmentId, setDepartmentId] = useState('');
@@ -153,6 +146,14 @@ export default function AttendanceScreen({ mode }: { mode: Mode }) {
   const [saving, setSaving] = useState(false);
   const [viewRecord, setViewRecord] = useState<any>(null);
   const [employeesReady, setEmployeesReady] = useState(!canManageAll);
+
+  const listRequestIdRef = useRef(0);
+  const employeesRef = useRef<any[]>(employees);
+  const departmentsRef = useRef<any[]>(departments);
+  const hasDisplayedRecordsRef = useRef(false);
+  employeesRef.current = employees;
+  departmentsRef.current = departments;
+  hasDisplayedRecordsRef.current = records.length > 0;
 
   const filters = useMemo(
     () => ({ from, to, departmentId, userId, status }),
@@ -182,7 +183,7 @@ export default function AttendanceScreen({ mode }: { mode: Mode }) {
 
       let departmentEmployeeIds: Set<string> | null = null;
       let list: any[] = [];
-      const nextScheduleContext = scheduleContext;
+      let nextScheduleContext = scheduleContext;
 
       if (showEmployeeMonthlyView) {
         const leavesPromise = apiClient.get(API_ENDPOINTS.LEAVES.MY).catch(() => null);
